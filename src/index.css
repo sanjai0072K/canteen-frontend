@@ -1,0 +1,135 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent: #dc2626;
+  --page-bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-soft: #eff6ff;
+  --text: #172033;
+  --muted: #64748b;
+  --border: #dbe3ef;
+  --input-bg: #ffffff;
+  --table-head: #eff6ff;
+  --success-bg: #dcfce7;
+  --success-text: #166534;
+  --danger-bg: #fee2e2;
+  --danger-text: #b91c1c;
+  --shadow: 0 8px 28px rgba(37, 99, 235, 0.09);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --accent: #f87171;
+  --page-bg: #0f172a;
+  --surface: #172033;
+  --surface-soft: #1e293b;
+  --text: #f1f5f9;
+  --muted: #a8b4c7;
+  --border: #334155;
+  --input-bg: #111827;
+  --table-head: #1e3a5f;
+  --success-bg: #143b2a;
+  --success-text: #86efac;
+  --danger-bg: #451a1a;
+  --danger-text: #fca5a5;
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background: var(--page-bg);
+  color: var(--text);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: 'Inter', sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+input,
+select,
+textarea {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: var(--table-head);
+  color: var(--text);
+}
+
+td,
+th {
+  border-bottom: 1px solid var(--border);
+  padding: 12px;
+  text-align: left;
+}
+
+.card {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: 14px;
+}
+
+::selection {
+  background: var(--primary);
+  color: #ffffff;
+}
