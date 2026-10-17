@@ -23,16 +23,21 @@ import AdminMenuPage from "./pages/AdminMenuPage";
 import HomePage from "./pages/HomePage";
 
 import { getStudent, saveStudent, clearStudent } from "./auth";
+import {
+  getAdminToken,
+  clearAdminToken,
+} from "./adminAuth";
 import { useTheme } from "./ThemeContext";
 
 function Layout() {
   const [student, setStudent] = useState(getStudent);
+  const [adminToken, setAdminToken] = useState(getAdminToken);
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
 
   const isAdminPage = location.pathname.startsWith("/admin");
-  const isHomePage = location.pathname === "/";
+  const isAdminLoginPage = location.pathname === "/admin/login";
 
   const handleLogin = (loggedInStudent) => {
     saveStudent(loggedInStudent);
@@ -44,6 +49,17 @@ function Layout() {
     clearStudent();
     setStudent(null);
     navigate("/");
+  };
+
+  const handleAdminLogin = () => {
+    setAdminToken(getAdminToken());
+    navigate("/admin/tokens");
+  };
+
+  const handleAdminLogout = () => {
+    clearAdminToken();
+    setAdminToken(null);
+    navigate("/admin/login");
   };
 
   const navStyle = {
@@ -88,7 +104,7 @@ function Layout() {
           CampusBite
         </Link>
 
-        {isAdminPage ? (
+        {isAdminPage && adminToken ? (
           <>
             <Link style={linkStyle} to="/admin/orders">
               All Orders
@@ -105,8 +121,11 @@ function Layout() {
             <Link style={linkStyle} to="/admin/menu">
               Menu Management
             </Link>
+            <button type="button" onClick={handleAdminLogout}>
+              Admin Logout
+            </button>
           </>
-        ) : student ? (
+        ) : isAdminLoginPage ? null : student ? (
           <>
             <Link style={linkStyle} to="/">
               Order Food
@@ -118,9 +137,11 @@ function Layout() {
               My Orders
             </Link>
             <span>Hi, {student.name}</span>
-            <button onClick={handleLogout}>Logout</button>
+            <button type="button" onClick={handleLogout}>
+              Logout
+            </button>
           </>
-        ) : !isHomePage ? (
+        ) : (
           <>
             <Link style={linkStyle} to="/login">
               Student Login
@@ -132,7 +153,7 @@ function Layout() {
               Admin Login
             </Link>
           </>
-        ) : null}
+        )}
 
         <button
           type="button"
@@ -146,7 +167,9 @@ function Layout() {
       <Routes>
         <Route
           path="/"
-          element={student ? <OrderPage student={student} /> : <HomePage />}
+          element={
+            student ? <OrderPage student={student} /> : <HomePage />
+          }
         />
 
         <Route
@@ -185,29 +208,80 @@ function Layout() {
         <Route
           path="/full-week-menu"
           element={
-            student ? <FullWeekMenuPage /> : <Navigate to="/login" replace />
+            student ? (
+              <FullWeekMenuPage />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
 
         <Route
           path="/admin/login"
-          element={<AdminLoginPage onLogin={() => {}} />}
+          element={
+            adminToken ? (
+              <Navigate to="/admin/tokens" replace />
+            ) : (
+              <AdminLoginPage onLogin={handleAdminLogin} />
+            )
+          }
         />
 
-        <Route path="/admin/orders" element={<AdminOrdersPage />} />
-        <Route path="/admin/tokens" element={<AdminTokensPage />} />
+        <Route
+          path="/admin/orders"
+          element={
+            adminToken ? (
+              <AdminOrdersPage />
+            ) : (
+              <Navigate to="/admin/login" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/admin/tokens"
+          element={
+            adminToken ? (
+              <AdminTokensPage />
+            ) : (
+              <Navigate to="/admin/login" replace />
+            )
+          }
+        />
 
         <Route
           path="/admin/blocked-students"
-          element={<AdminBlockedStudentsPage />}
+          element={
+            adminToken ? (
+              <AdminBlockedStudentsPage />
+            ) : (
+              <Navigate to="/admin/login" replace />
+            )
+          }
         />
 
         <Route
           path="/admin/full-week-menu"
-          element={<FullWeekMenuPage />}
+          element={
+            adminToken ? (
+              <FullWeekMenuPage />
+            ) : (
+              <Navigate to="/admin/login" replace />
+            )
+          }
         />
 
-        <Route path="/admin/menu" element={<AdminMenuPage />} />
+        <Route
+          path="/admin/menu"
+          element={
+            adminToken ? (
+              <AdminMenuPage />
+            ) : (
+              <Navigate to="/admin/login" replace />
+            )
+          }
+        />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
